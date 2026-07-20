@@ -345,10 +345,10 @@
     var el = document.querySelector("#menu .main-menu");
     if (!el) return;
 
-    // Target width: almost full screen (leave side gutters for social icons)
-    var targetW = Math.min(window.innerWidth * 0.96, 1480);
+    // Target width: wide deck, small gutters (social icons sit beside menu)
+    var targetW = Math.min(window.innerWidth * 0.9, 1380);
     el.style.width = Math.round(targetW) + "px";
-    el.style.maxWidth = "96vw";
+    el.style.maxWidth = "90vw";
 
     // Measure at scale 1, then shrink only if taller than viewport
     el.style.setProperty("--menu-scale", "1");
