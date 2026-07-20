@@ -341,6 +341,19 @@
     }
   }
 
+  function lockServerListScroll() {
+    var box = document.querySelector(
+      "#menu .main-menu .panel.right .list-container"
+    );
+    if (!box) return;
+    // Force original-style scroll box so servers never stretch the menu
+    box.style.setProperty("height", "450px", "important");
+    box.style.setProperty("max-height", "450px", "important");
+    box.style.setProperty("overflow-x", "hidden", "important");
+    box.style.setProperty("overflow-y", "scroll", "important");
+    box.style.setProperty("box-sizing", "border-box", "important");
+  }
+
   function fitMenuToViewport() {
     var el = document.querySelector("#menu .main-menu");
     if (!el) return;
@@ -380,6 +393,7 @@
       ensureSettingsFab();
       syncProfileVisibility();
       boostServerRows();
+      lockServerListScroll();
       fitMenuToViewport();
     } catch (_e) {
     } finally {
