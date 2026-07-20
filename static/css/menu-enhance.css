@@ -180,6 +180,12 @@
   flex: 0.95 1 0 !important;
   width: auto !important;
   max-width: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  min-height: 0 !important;
 }
 
 /*
@@ -375,7 +381,7 @@
   border-color: var(--deck-ember) !important;
 }
 
-/* Account / login card — auto height, no 290px empty box */
+/* Account / login card — content height only (no stretch → no black void) */
 #menu .main-menu .panel.left #main-left-panel {
   width: 100% !important;
   max-width: 100% !important;
@@ -383,10 +389,10 @@
   min-height: 0 !important;
   margin: 0 !important;
   padding: var(--left-pad) !important;
-  flex: 1 1 auto !important;
+  flex: 0 0 auto !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 10px !important;
+  gap: 8px !important;
   box-sizing: border-box !important;
   border-radius: 4px !important;
   border: 1px solid var(--deck-line) !important;
@@ -398,8 +404,8 @@
   height: auto !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 10px !important;
-  flex: 1 1 auto !important;
+  gap: 8px !important;
+  flex: 0 0 auto !important;
   min-height: 0 !important;
 }
 
@@ -524,14 +530,14 @@
   display: none;
 }
 
-/* Footer — pinned to bottom of left deck, no giant empty gap above */
+/* Footer — directly under login, no giant empty band */
 #menu .main-menu .panel.left .info-text {
   flex: 0 0 auto !important;
-  margin: auto 0 0 !important;
-  padding-top: 8px !important;
+  margin: 4px 0 0 !important;
+  padding-top: 0 !important;
   text-align: center !important;
   font-size: 11px !important;
-  line-height: 1.4 !important;
+  line-height: 1.35 !important;
   color: rgba(230, 238, 245, 0.42) !important;
 }
 
@@ -836,6 +842,37 @@
   border-radius: 3px !important;
 }
 
+/* Discord sits under the server list — no empty black gap in center */
+#menu .main-menu .panel.right #discord_link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 36px !important;
+  margin: 10px 0 0 !important;
+  padding: 0 12px !important;
+  box-sizing: border-box !important;
+  flex: 0 0 auto !important;
+  text-decoration: none !important;
+  background: rgba(88, 101, 242, 0.92) !important;
+  border: 1px solid rgba(126, 184, 212, 0.35) !important;
+  border-radius: 3px !important;
+  font-family: "Oxanium", sans-serif !important;
+}
+
+#menu .main-menu .panel.right #discord_link img {
+  height: 22px !important;
+  width: 22px !important;
+}
+
+#menu .main-menu .panel.right #discord_link span {
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  margin-left: 8px !important;
+}
+
 /* ===== RIGHT — SERVERS (LARGE NAMES) ===== */
 #menu .main-menu .panel.right .title {
   font-family: "Oxanium", sans-serif !important;
@@ -888,16 +925,16 @@
   background: rgba(0, 0, 0, 0.4) !important;
   padding: 6px 8px !important;
   margin-top: -1px !important;
-  height: 450px !important;
-  max-height: 450px !important;
+  /* Shorter list = shorter menu = settings stay on screen + less black void */
+  height: min(360px, 48vh) !important;
+  max-height: min(360px, 48vh) !important;
   min-height: 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  flex: 0 0 450px !important;
+  flex: 0 0 auto !important;
   align-self: stretch !important;
   position: relative !important;
   z-index: 3 !important;
-  /* Real scrollport — clips rows and drives scrollbar/wheel */
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
@@ -1340,9 +1377,10 @@ body.senpa-404-awake #menu .main-menu .panel.center #spectate { animation-delay:
   height: 64px !important;
 }
 
-#menu .main-menu .panel.center #discord_link {
-  margin-top: 6px !important;
-  margin-bottom: 4px !important;
+#menu .main-menu .panel.center .advertisement-informer,
+#menu .main-menu .panel.center #senpa-nick404 {
+  flex: 0 0 auto !important;
+  margin-bottom: 0 !important;
 }
 
 .replays-container {

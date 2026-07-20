@@ -183,13 +183,25 @@
     }
   }
 
+  function placeDiscordUnderServers() {
+    var discord = document.getElementById("discord_link");
+    var right = document.querySelector("#menu .main-menu .panel.right");
+    var list = right && right.querySelector(".list-container");
+    if (!discord || !right || !list) return;
+
+    // Sit Discord on the line where the server list ends
+    if (discord.parentNode !== right || discord.previousElementSibling !== list) {
+      if (list.nextSibling) right.insertBefore(discord, list.nextSibling);
+      else right.appendChild(discord);
+    }
+  }
+
   function placeNick404(card) {
     var center = document.querySelector("#menu .main-menu .panel.center");
     if (!center || !card) return;
 
     // Glue directly under the "Advertisement" label
     var adInformer = center.querySelector(".advertisement-informer");
-    var discord = center.querySelector("#discord_link");
 
     if (adInformer && adInformer.parentNode) {
       var parent = adInformer.parentNode;
@@ -213,11 +225,6 @@
         if (anchor.nextSibling) p.insertBefore(card, anchor.nextSibling);
         else p.appendChild(card);
       }
-      return;
-    }
-
-    if (discord && discord.parentNode) {
-      discord.parentNode.insertBefore(card, discord);
       return;
     }
     if (card.parentNode !== center) center.appendChild(card);
@@ -429,9 +436,9 @@
     );
     if (!box) return;
 
-    // Structural scrollport (CSS is source of truth; reinforce once)
-    box.style.height = "450px";
-    box.style.maxHeight = "450px";
+    // Keep CSS height (min(360px, 48vh)) — do not force 450px
+    box.style.height = "";
+    box.style.maxHeight = "";
     box.style.minHeight = "0";
     box.style.overflowX = "hidden";
     box.style.overflowY = "auto";
@@ -440,7 +447,6 @@
     box.style.touchAction = "pan-y";
     box.style.overscrollBehavior = "contain";
 
-    // Keyboard scrolling when the list is focused
     if (!box.hasAttribute("tabindex")) {
       box.setAttribute("tabindex", "0");
       box.setAttribute("role", "listbox");
@@ -450,7 +456,6 @@
     if (!box.dataset.senpaScrollBound) {
       box.dataset.senpaScrollBound = "1";
 
-      // Focus on pointer enter so Arrow/Page keys scroll this box
       box.addEventListener("mouseenter", function () {
         if (document.activeElement !== box) {
           try {
@@ -487,31 +492,41 @@
     el.style.width = Math.round(targetW) + "px";
     el.style.maxWidth = "90vw";
 
-    // Measure at scale 1, then shrink only if taller than viewport
+    // Measure at scale 1
     el.style.setProperty("--menu-scale", "1");
     document.documentElement.style.setProperty("--menu-scale", "1");
     void el.offsetWidth;
     var w = el.offsetWidth || targetW;
     var h = el.offsetHeight || 700;
-    var padX = 24;
-    var padY = 64;
+    // Extra vertical pad so SETTINGS / SAVE REPLAY never clip (like browser zoom 90%)
+    var padX = 32;
+    var padY = 88;
     var sx = (window.innerWidth - padX) / w;
     var sy = (window.innerHeight - padY) / h;
     var s = Math.min(1, sx, sy);
     if (!isFinite(s) || s <= 0) s = 1;
-    s = Math.max(0.55, Math.min(1, s * 0.96));
+    // Prefer ~90% feel so top toolbar stays fully visible
+    s = Math.max(0.55, Math.min(0.92, s * 0.94));
     var rounded = (Math.round(s * 1000) / 1000).toFixed(3);
     el.style.setProperty("--menu-scale", rounded);
     document.documentElement.style.setProperty("--menu-scale", rounded);
 
-    // If top (settings/replays) is still clipped, shrink a bit more
+    // Iterate if still clipped top or bottom
     void el.offsetWidth;
-    var top = el.getBoundingClientRect().top;
-    if (top < 10 && s > 0.55) {
-      var fix = Math.max(0.55, s * 0.94);
-      rounded = (Math.round(fix * 1000) / 1000).toFixed(3);
+    var rect = el.getBoundingClientRect();
+    var tries = 0;
+    while (
+      tries < 4 &&
+      s > 0.55 &&
+      (rect.top < 12 || rect.bottom > window.innerHeight - 12)
+    ) {
+      s = Math.max(0.55, s * 0.93);
+      rounded = (Math.round(s * 1000) / 1000).toFixed(3);
       el.style.setProperty("--menu-scale", rounded);
       document.documentElement.style.setProperty("--menu-scale", rounded);
+      void el.offsetWidth;
+      rect = el.getBoundingClientRect();
+      tries++;
     }
   }
 
@@ -526,6 +541,7 @@
       ensureProfileStrip();
       ensureSettingsFab();
       layoutLeftPanel();
+      placeDiscordUnderServers();
       syncProfileVisibility();
       boostServerRows();
       lockServerListScroll();
