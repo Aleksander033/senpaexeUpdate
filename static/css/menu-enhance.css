@@ -164,7 +164,6 @@
   flex: 1.05 1 0 !important;
   margin-right: 0 !important;
   max-width: none !important;
-  /* Left deck is a vertical stack — no leftover empty bands */
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
@@ -174,6 +173,7 @@
   min-height: 0 !important;
   height: auto !important;
   box-sizing: border-box !important;
+  align-self: flex-start !important;
 }
 
 #menu .main-menu .panel.center {
@@ -186,6 +186,8 @@
   justify-content: flex-start !important;
   gap: 8px !important;
   min-height: 0 !important;
+  height: auto !important;
+  align-self: flex-start !important;
 }
 
 /*
@@ -202,8 +204,11 @@
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
+  justify-content: flex-start !important;
   min-height: 0 !important;
+  height: auto !important;
   overflow: visible !important;
+  align-self: flex-start !important;
 }
 
 #menu .main-menu .panel.right .title,
@@ -837,40 +842,18 @@
 }
 
 #menu .main-menu .panel.center #discord_link {
-  background: rgba(126, 184, 212, 0.1) !important;
-  border: 1px solid rgba(126, 184, 212, 0.25) !important;
-  border-radius: 3px !important;
-}
-
-/* Discord sits under the server list — no empty black gap in center */
-#menu .main-menu .panel.right #discord_link {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
   height: 36px !important;
-  margin: 10px 0 0 !important;
-  padding: 0 12px !important;
-  box-sizing: border-box !important;
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
   flex: 0 0 auto !important;
-  text-decoration: none !important;
   background: rgba(88, 101, 242, 0.92) !important;
   border: 1px solid rgba(126, 184, 212, 0.35) !important;
   border-radius: 3px !important;
-  font-family: "Oxanium", sans-serif !important;
-}
-
-#menu .main-menu .panel.right #discord_link img {
-  height: 22px !important;
-  width: 22px !important;
-}
-
-#menu .main-menu .panel.right #discord_link span {
-  color: #fff !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.06em !important;
-  margin-left: 8px !important;
+  text-decoration: none !important;
 }
 
 /* ===== RIGHT — SERVERS (LARGE NAMES) ===== */
@@ -925,13 +908,14 @@
   background: rgba(0, 0, 0, 0.4) !important;
   padding: 6px 8px !important;
   margin-top: -1px !important;
-  /* Shorter list = shorter menu = settings stay on screen + less black void */
-  height: min(360px, 48vh) !important;
-  max-height: min(360px, 48vh) !important;
+  margin-bottom: 0 !important;
+  /* Original Senpa height — border ends with the list */
+  height: 450px !important;
+  max-height: 450px !important;
   min-height: 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  flex: 0 0 auto !important;
+  flex: 0 0 450px !important;
   align-self: stretch !important;
   position: relative !important;
   z-index: 3 !important;
@@ -940,7 +924,6 @@
   overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  scrollbar-gutter: stable;
 }
 
 /* Full-width 3 columns — fixes gray empty gap + clipped GAME MODE */
@@ -1381,6 +1364,12 @@ body.senpa-404-awake #menu .main-menu .panel.center #spectate { animation-delay:
 #menu .main-menu .panel.center #senpa-nick404 {
   flex: 0 0 auto !important;
   margin-bottom: 0 !important;
+}
+
+#menu .main-menu .panel.center #discord_link {
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+  flex: 0 0 auto !important;
 }
 
 .replays-container {

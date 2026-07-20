@@ -183,17 +183,23 @@
     }
   }
 
-  function placeDiscordUnderServers() {
+  function placeDiscordInCenter() {
     var discord = document.getElementById("discord_link");
-    var right = document.querySelector("#menu .main-menu .panel.right");
-    var list = right && right.querySelector(".list-container");
-    if (!discord || !right || !list) return;
+    var center = document.querySelector("#menu .main-menu .panel.center");
+    if (!discord || !center) return;
 
-    // Sit Discord on the line where the server list ends
-    if (discord.parentNode !== right || discord.previousElementSibling !== list) {
-      if (list.nextSibling) right.insertBefore(discord, list.nextSibling);
-      else right.appendChild(discord);
+    // Original place: end of center column (under ads / Nick 404)
+    var nick = document.getElementById("senpa-nick404");
+    var ad = center.querySelector(".advertisement-informer");
+    var anchor = nick || ad;
+    if (anchor && anchor.parentNode) {
+      if (discord.parentNode !== anchor.parentNode || discord.previousElementSibling !== anchor) {
+        if (anchor.nextSibling) anchor.parentNode.insertBefore(discord, anchor.nextSibling);
+        else anchor.parentNode.appendChild(discord);
+      }
+      return;
     }
+    if (discord.parentNode !== center) center.appendChild(discord);
   }
 
   function placeNick404(card) {
@@ -202,6 +208,7 @@
 
     // Glue directly under the "Advertisement" label
     var adInformer = center.querySelector(".advertisement-informer");
+    var discord = center.querySelector("#discord_link");
 
     if (adInformer && adInformer.parentNode) {
       var parent = adInformer.parentNode;
@@ -225,6 +232,11 @@
         if (anchor.nextSibling) p.insertBefore(card, anchor.nextSibling);
         else p.appendChild(card);
       }
+      return;
+    }
+
+    if (discord && discord.parentNode) {
+      discord.parentNode.insertBefore(card, discord);
       return;
     }
     if (card.parentNode !== center) center.appendChild(card);
@@ -436,9 +448,9 @@
     );
     if (!box) return;
 
-    // Keep CSS height (min(360px, 48vh)) — do not force 450px
-    box.style.height = "";
-    box.style.maxHeight = "";
+    // Keep CSS height 450px (original Senpa list box)
+    box.style.height = "450px";
+    box.style.maxHeight = "450px";
     box.style.minHeight = "0";
     box.style.overflowX = "hidden";
     box.style.overflowY = "auto";
@@ -446,6 +458,8 @@
     box.style.position = "relative";
     box.style.touchAction = "pan-y";
     box.style.overscrollBehavior = "contain";
+    box.style.marginBottom = "0";
+    box.style.flex = "0 0 450px";
 
     if (!box.hasAttribute("tabindex")) {
       box.setAttribute("tabindex", "0");
@@ -541,7 +555,7 @@
       ensureProfileStrip();
       ensureSettingsFab();
       layoutLeftPanel();
-      placeDiscordUnderServers();
+      placeDiscordInCenter();
       syncProfileVisibility();
       boostServerRows();
       lockServerListScroll();
