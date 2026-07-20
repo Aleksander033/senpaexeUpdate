@@ -1,0 +1,261 @@
+/* Senpa HUD enhance — CSS variables + LB/allies/minimap/chat (visual only) */
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;800&display=swap");
+
+:root {
+  --hud-panel-bg-rgb: 0, 0, 0;
+  --hud-panel-opacity: 0.3;
+  --hud-leaderboard-title-color: #705e5e;
+  --hud-allies-title-color: #705e5e;
+  --hud-minimap-bg-rgb: 0, 0, 0;
+  --hud-minimap-opacity: 0.5;
+  --hud-chat-bg-rgb: 0, 0, 0;
+  --hud-chat-opacity: 0.32;
+  --hud-chat-name-color: #705e5e;
+  --hud-chat-active-tab-color: #705e5e;
+  --hud-chat-party-color: #705e5e;
+  --hud-chat-server-color: #ff5a8e;
+  --hud-chat-text-color: #ffffff;
+  --hud-edge-gap: 5px;
+  --hud-stack-gap: 5px;
+  --hud-leaderboard-scale: 1;
+  --hud-allies-scale: 1;
+  --hud-minimap-scale: 1;
+  --hud-chat-scale: 1;
+  --hud-stats-scale: 1;
+  --hud-bg-color: #111111;
+}
+
+/* Background sync target */
+body,
+.window,
+.screen {
+  background-color: var(--hud-bg-color);
+}
+
+/* ===== Leaderboard ===== */
+.leaderboard {
+  background: transparent !important;
+  padding: 0 !important;
+  right: var(--hud-edge-gap) !important;
+  top: var(--hud-edge-gap) !important;
+  width: auto !important;
+  min-width: 170px;
+  transform: scale(var(--hud-leaderboard-scale));
+  transform-origin: top right;
+}
+
+.leaderboard .title {
+  color: var(--hud-leaderboard-title-color) !important;
+  font-family: "Titillium Web", Rajdhani, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: right !important;
+  margin-bottom: 5px;
+  padding: 0 2px;
+  background: transparent !important;
+}
+
+.leaderboard .positions {
+  font-family: "Titillium Web", Ubuntu, sans-serif !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.leaderboard .positions > div,
+.leaderboard .positions > span,
+.leaderboard .positions .lb-row {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  padding: 5px 8px !important;
+  margin-bottom: 2px !important;
+  background: rgba(var(--hud-panel-bg-rgb), var(--hud-panel-opacity)) !important;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+/* ===== Allies / team list ===== */
+.team-players-list {
+  left: var(--hud-edge-gap) !important;
+  top: var(--hud-edge-gap) !important;
+  padding: 0 !important;
+  transform: scale(var(--hud-allies-scale));
+  transform-origin: top left;
+}
+
+.team-players-list .team-players-title {
+  background: transparent !important;
+  color: var(--hud-allies-title-color) !important;
+  font-family: "Titillium Web", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0 2px 5px !important;
+  margin-bottom: 0 !important;
+}
+
+.team-players-list .team-players-positions div.playerRow {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px !important;
+  margin-bottom: 2px !important;
+  background: rgba(var(--hud-panel-bg-rgb), var(--hud-panel-opacity)) !important;
+  border-radius: 3px;
+}
+
+.team-players-list .team-players-positions div.playerRow span {
+  font-family: "Titillium Web", sans-serif !important;
+  font-size: 11px !important;
+  margin: 0 !important;
+}
+
+/* ===== Minimap ===== */
+.minimap-root {
+  right: var(--hud-edge-gap) !important;
+  bottom: var(--hud-edge-gap) !important;
+  border: none !important;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(var(--hud-minimap-bg-rgb), var(--hud-minimap-opacity));
+  transform: scale(var(--hud-minimap-scale));
+  transform-origin: bottom right;
+}
+
+.minimap-root .server-timer {
+  background: rgba(var(--hud-minimap-bg-rgb), var(--hud-minimap-opacity)) !important;
+  right: var(--hud-edge-gap) !important;
+  border-radius: 3px;
+  font-family: "Titillium Web", sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600;
+}
+
+/* ===== Stats / FPS / ping ===== */
+.hud-left-bottom {
+  left: var(--hud-edge-gap) !important;
+  bottom: var(--hud-edge-gap) !important;
+  transform: scale(var(--hud-stats-scale));
+  transform-origin: bottom left;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.stats-display {
+  background: rgba(var(--hud-panel-bg-rgb), var(--hud-panel-opacity)) !important;
+  border-radius: 3px;
+  font-family: "Titillium Web", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600;
+  padding: 6px 8px !important;
+  letter-spacing: 0.02em;
+}
+
+.room-stats-display {
+  background: rgba(var(--hud-panel-bg-rgb), 0.75) !important;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Dual ping + FPS/Hz badges (injected) */
+#senpa-hud-badges {
+  position: fixed;
+  left: var(--hud-edge-gap);
+  bottom: var(--hud-edge-gap);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 40;
+  pointer-events: none;
+  transform: scale(var(--hud-stats-scale));
+  transform-origin: bottom left;
+}
+
+.senpa-hud-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(var(--hud-panel-bg-rgb), var(--hud-panel-opacity));
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-family: "Titillium Web", sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  color: #fff;
+  letter-spacing: 0.02em;
+  min-width: 64px;
+  justify-content: center;
+}
+
+.senpa-hud-badge .sep {
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 4px;
+}
+
+.senpa-hud-badge .hz {
+  color: #8c8c8c;
+}
+
+.senpa-hud-badge.ping.warn {
+  color: #ff8c00;
+}
+
+.senpa-hud-badge.ping.bad {
+  color: #ef4444;
+}
+
+.senpa-hud-badge .ping-slot {
+  display: inline-flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 7px;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Visibility toggles via body classes */
+body.hide-leaderboard .leaderboard {
+  display: none !important;
+}
+body.hide-allies .team-players-list {
+  display: none !important;
+}
+body.hide-minimap .minimap-root {
+  display: none !important;
+}
+body.hide-chat .chat-box,
+body.hide-chat #chatbox,
+body.hide-chat .chat {
+  display: none !important;
+}
+
+/* Chat theming hooks (common Senpa chat containers) */
+.chat-box,
+#chatbox,
+.chat {
+  transform: scale(var(--hud-chat-scale));
+  transform-origin: bottom left;
+}
+
+.chat-box .chat-tab.active,
+#chatbox .chat-tab.active {
+  background: var(--hud-chat-active-tab-color) !important;
+}
+
+.chat-nick,
+.chat .nick {
+  color: var(--hud-chat-name-color) !important;
+}
