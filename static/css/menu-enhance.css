@@ -15,6 +15,7 @@
   --deck-mist: rgba(230, 238, 245, 0.64);
   --deck-line: rgba(232, 132, 74, 0.18);
   --deck-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --menu-scale: 1;
 }
 
 /* ===== Stage ===== */
@@ -43,11 +44,9 @@
 @keyframes deck-float-in {
   from {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + 16px)) scale(0.965);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -86,7 +85,7 @@
   }
 }
 
-/* ===== Main panel ===== */
+/* ===== Main panel — auto-fits viewport (no 50% browser zoom needed) ===== */
 #menu .main-menu {
   background:
     linear-gradient(150deg, rgba(232, 132, 74, 0.09) 0%, transparent 40%),
@@ -98,16 +97,34 @@
     0 36px 96px rgba(0, 0, 0, 0.82),
     0 0 72px rgba(232, 132, 74, 0.12) !important;
   padding: 0 !important;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: min(92vh, 920px);
-  animation: deck-float-in 0.5s var(--deck-ease);
-  position: relative;
+  overflow: visible;
+  max-height: none;
+  animation: deck-float-in 0.45s var(--deck-ease);
+  /* Parent #menu is flex-centered — do NOT use left/top 50% */
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
   isolation: isolate;
-  /* Keep full menu on screen so replays icons at top stay visible */
-  top: 50% !important;
-  -webkit-transform: translate(-50%, -50%) !important;
-  transform: translate(-50%, -50%) !important;
+  transform-origin: center center !important;
+  -webkit-transform: scale(var(--menu-scale, 1)) !important;
+  transform: scale(var(--menu-scale, 1)) !important;
+}
+
+/* Override Senpa media rule that breaks centering (translateY only) */
+@media screen and (min-width: 1240px) and (min-height: 760px) {
+  #menu .main-menu {
+    -webkit-transform: translateY(-36px) scale(var(--menu-scale, 1)) !important;
+    transform: translateY(-36px) scale(var(--menu-scale, 1)) !important;
+  }
+}
+
+#menu .main-menu .panel {
+  width: 320px !important;
+  padding: 10px 12px !important;
+}
+
+#menu .main-menu .panel.center {
+  width: 300px !important;
 }
 
 #menu .main-menu::before {
@@ -455,10 +472,10 @@
 #menu .main-menu .panel.right .list-container .list-row,
 #menu .main-menu .panel.right .list-container .list-row.senpa-server-row {
   font-family: "Sora", sans-serif !important;
-  font-size: 19px !important;
+  font-size: 15px !important;
   font-weight: 700 !important;
-  line-height: 1.4 !important;
-  padding: 11px 8px !important;
+  line-height: 1.35 !important;
+  padding: 8px 6px !important;
   text-align: left !important;
   border-left: 3px solid transparent !important;
   border-radius: 3px;
@@ -491,7 +508,7 @@
 #menu .main-menu .panel.right .list-container .list-row .list-cell:first-child,
 #menu .main-menu .panel.right .list-container .list-row .list-cell.senpa-server-name {
   flex: 1.35 1 0 !important;
-  font-size: 22px !important;
+  font-size: 16px !important;
   font-weight: 800 !important;
   letter-spacing: 0.01em;
   color: #ffffff !important;

@@ -341,6 +341,28 @@
     }
   }
 
+  function fitMenuToViewport() {
+    var el = document.querySelector("#menu .main-menu");
+    if (!el) return;
+    // Measure natural size at scale 1
+    el.style.setProperty("--menu-scale", "1");
+    document.documentElement.style.setProperty("--menu-scale", "1");
+    void el.offsetWidth;
+    var w = el.offsetWidth || 1040;
+    var h = el.offsetHeight || 700;
+    var padX = 32;
+    var padY = 40;
+    var sx = (window.innerWidth - padX) / w;
+    var sy = (window.innerHeight - padY) / h;
+    var s = Math.min(1, sx, sy);
+    if (!isFinite(s) || s <= 0) s = 1;
+    // Prefer fitting fully; never enlarge past 1
+    s = Math.max(0.48, Math.min(1, s * 0.96));
+    var rounded = (Math.round(s * 1000) / 1000).toFixed(3);
+    el.style.setProperty("--menu-scale", rounded);
+    document.documentElement.style.setProperty("--menu-scale", rounded);
+  }
+
   var _tickBusy = false;
   function tick() {
     if (_tickBusy) return;
@@ -353,6 +375,7 @@
       ensureSettingsFab();
       syncProfileVisibility();
       boostServerRows();
+      fitMenuToViewport();
     } catch (_e) {
     } finally {
       _tickBusy = false;
@@ -361,6 +384,8 @@
 
   tick();
   setInterval(tick, 800);
+  window.addEventListener("resize", fitMenuToViewport);
+  window.addEventListener("orientationchange", fitMenuToViewport);
   var _moTimer = null;
   new MutationObserver(function () {
     if (_moTimer) return;
