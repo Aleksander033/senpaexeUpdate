@@ -344,20 +344,25 @@
   function fitMenuToViewport() {
     var el = document.querySelector("#menu .main-menu");
     if (!el) return;
-    // Measure natural size at scale 1
+
+    // Target width: almost full screen (leave side gutters for social icons)
+    var targetW = Math.min(window.innerWidth * 0.96, 1480);
+    el.style.width = Math.round(targetW) + "px";
+    el.style.maxWidth = "96vw";
+
+    // Measure at scale 1, then shrink only if taller than viewport
     el.style.setProperty("--menu-scale", "1");
     document.documentElement.style.setProperty("--menu-scale", "1");
     void el.offsetWidth;
-    var w = el.offsetWidth || 1040;
+    var w = el.offsetWidth || targetW;
     var h = el.offsetHeight || 700;
-    var padX = 32;
-    var padY = 40;
+    var padX = 24;
+    var padY = 36;
     var sx = (window.innerWidth - padX) / w;
     var sy = (window.innerHeight - padY) / h;
     var s = Math.min(1, sx, sy);
     if (!isFinite(s) || s <= 0) s = 1;
-    // Prefer fitting fully; never enlarge past 1
-    s = Math.max(0.48, Math.min(1, s * 0.96));
+    s = Math.max(0.55, Math.min(1, s * 0.98));
     var rounded = (Math.round(s * 1000) / 1000).toFixed(3);
     el.style.setProperty("--menu-scale", rounded);
     document.documentElement.style.setProperty("--menu-scale", rounded);

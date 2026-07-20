@@ -85,7 +85,7 @@
   }
 }
 
-/* ===== Main panel — auto-fits viewport (no 50% browser zoom needed) ===== */
+/* ===== Main panel — wide deck that fills the screen ===== */
 #menu .main-menu {
   background:
     linear-gradient(150deg, rgba(232, 132, 74, 0.09) 0%, transparent 40%),
@@ -97,14 +97,21 @@
     0 36px 96px rgba(0, 0, 0, 0.82),
     0 0 72px rgba(232, 132, 74, 0.12) !important;
   padding: 0 !important;
-  overflow: visible;
+  overflow: hidden;
   max-height: none;
   animation: deck-float-in 0.45s var(--deck-ease);
-  /* Parent #menu is flex-centered — do NOT use left/top 50% */
   position: relative !important;
   left: auto !important;
   top: auto !important;
   isolation: isolate;
+  /* Fill most of the viewport — less empty black at the sides */
+  width: min(96vw, 1480px) !important;
+  max-width: 96vw !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  box-sizing: border-box !important;
   transform-origin: center center !important;
   -webkit-transform: scale(var(--menu-scale, 1)) !important;
   transform: scale(var(--menu-scale, 1)) !important;
@@ -113,18 +120,44 @@
 /* Override Senpa media rule that breaks centering (translateY only) */
 @media screen and (min-width: 1240px) and (min-height: 760px) {
   #menu .main-menu {
-    -webkit-transform: translateY(-36px) scale(var(--menu-scale, 1)) !important;
-    transform: translateY(-36px) scale(var(--menu-scale, 1)) !important;
+    -webkit-transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
+    transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
   }
 }
 
 #menu .main-menu .panel {
-  width: 320px !important;
-  padding: 10px 12px !important;
+  display: block !important;
+  float: none !important;
+  width: auto !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding: 12px 14px !important;
+  box-sizing: border-box !important;
+  vertical-align: top;
+}
+
+#menu .main-menu .panel.left {
+  flex: 1.05 1 0 !important;
+  margin-right: 0 !important;
+  max-width: none !important;
 }
 
 #menu .main-menu .panel.center {
-  width: 300px !important;
+  flex: 0.95 1 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+#menu .main-menu .panel.right {
+  flex: 1.15 1 0 !important;
+  margin-left: 0 !important;
+  max-width: none !important;
+}
+
+/* Server list uses full column height */
+#menu .main-menu .panel.right .list-container {
+  max-height: min(52vh, 420px) !important;
+  overflow-y: auto !important;
 }
 
 #menu .main-menu::before {
@@ -341,7 +374,7 @@
   visibility: visible !important;
   height: 38px !important;
   width: 100% !important;
-  max-width: 315px;
+  max-width: 100%;
   margin-bottom: 8px !important;
   font-size: 14px !important;
 }
