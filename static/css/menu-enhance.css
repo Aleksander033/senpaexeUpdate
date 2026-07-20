@@ -512,18 +512,6 @@
   box-shadow: 0 0 14px rgba(232, 132, 74, 0.75);
 }
 
-#menu .main-menu .panel.right .region-selectors {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  border-top: 2px solid transparent;
-  margin-top: 10px !important;
-  padding-top: 4px !important;
-  gap: 0 !important;
-}
-
 #menu .main-menu .panel.right .region-selectors .tab {
   font-family: "Oxanium", sans-serif !important;
   font-weight: 700 !important;
@@ -534,14 +522,6 @@
   border-radius: 3px !important;
   color: var(--deck-mist) !important;
   padding: 7px 14px !important;
-  /* Fill the panel — kill original fixed 108px tabs */
-  display: block !important;
-  float: none !important;
-  flex: 1 1 0 !important;
-  width: auto !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  box-sizing: border-box !important;
 }
 
 #menu .main-menu .panel.right .region-selectors .tab.active {
@@ -561,7 +541,6 @@
   max-height: 450px !important;
   min-height: 0 !important;
   width: 100% !important;
-  max-width: 100% !important;
   box-sizing: border-box !important;
   flex: 0 0 450px !important;
   align-self: stretch !important;
@@ -574,31 +553,27 @@
   touch-action: pan-y;
 }
 
-/* Rows must span the FULL list-container width (no gray empty strip) */
+/* Stretch server rows across the list box only — no other layout changes */
 #menu .main-menu .panel.right .list-container .list-row,
 #menu .main-menu .panel.right .list-container .list-row.senpa-server-row {
   font-family: "Sora", sans-serif !important;
   font-size: 14px !important;
   font-weight: 700 !important;
   line-height: 1.3 !important;
-  padding: 6px 10px !important;
+  padding: 6px 8px !important;
   text-align: left !important;
   border-left: 3px solid transparent !important;
   border-radius: 3px;
   transition: background 0.15s, border-color 0.15s !important;
   color: #f4f7fb !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.6fr) minmax(72px, 0.55fr) minmax(0, 1.2fr) !important;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center !important;
-  justify-content: stretch !important;
-  column-gap: 12px !important;
+  column-gap: 10px !important;
   width: 100% !important;
-  min-width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
   margin: 0 !important;
-  float: none !important;
-  clear: both !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell,
@@ -607,12 +582,11 @@
   font-size: 14px !important;
   font-weight: 650 !important;
   display: block !important;
-  float: none !important;
-  /* Kill original inline-block + width:105px that left the gray gap */
-  width: auto !important;
+  /* Override original width:105px — flex distributes across full row */
+  width: 0 !important;
   min-width: 0 !important;
   max-width: none !important;
-  flex: none !important;
+  flex: 1 1 0 !important;
   padding: 0 !important;
   margin: 0 !important;
   white-space: nowrap !important;
@@ -628,6 +602,7 @@
   letter-spacing: 0.01em;
   color: #ffffff !important;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+  flex: 1.5 1 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:nth-child(2) {
@@ -635,12 +610,14 @@
   color: var(--deck-glacier) !important;
   font-variant-numeric: tabular-nums;
   text-align: center !important;
+  flex: 0.55 1 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:nth-child(3) {
   font-size: 13px !important;
   color: rgba(230, 238, 245, 0.78) !important;
   text-align: left !important;
+  flex: 1.2 1 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row:hover {
@@ -836,7 +813,6 @@
   font-size: 13px !important;
   padding: 9px 16px !important;
   line-height: 1.2 !important;
-  width: auto !important;
 }
 
 /* ===== Nick 404 — under ads / above Discord (center black area) ===== */
