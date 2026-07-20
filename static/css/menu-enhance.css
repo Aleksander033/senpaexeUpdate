@@ -512,6 +512,18 @@
   box-shadow: 0 0 14px rgba(232, 132, 74, 0.75);
 }
 
+#menu .main-menu .panel.right .region-selectors {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-top: 2px solid transparent;
+  margin-top: 10px !important;
+  padding-top: 4px !important;
+  gap: 0 !important;
+}
+
 #menu .main-menu .panel.right .region-selectors .tab {
   font-family: "Oxanium", sans-serif !important;
   font-weight: 700 !important;
@@ -522,6 +534,14 @@
   border-radius: 3px !important;
   color: var(--deck-mist) !important;
   padding: 7px 14px !important;
+  /* Fill the panel — kill original fixed 108px tabs */
+  display: block !important;
+  float: none !important;
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
 }
 
 #menu .main-menu .panel.right .region-selectors .tab.active {
@@ -541,41 +561,44 @@
   max-height: 450px !important;
   min-height: 0 !important;
   width: 100% !important;
+  max-width: 100% !important;
   box-sizing: border-box !important;
   flex: 0 0 450px !important;
   align-self: stretch !important;
   position: relative !important;
   z-index: 3 !important;
-  /* Real scrollport — clips rows and drives scrollbar/wheel */
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  scrollbar-gutter: stable;
 }
 
-/* Full-width 3 columns — fixes gray empty gap + clipped GAME MODE */
+/* Rows must span the FULL list-container width (no gray empty strip) */
 #menu .main-menu .panel.right .list-container .list-row,
 #menu .main-menu .panel.right .list-container .list-row.senpa-server-row {
   font-family: "Sora", sans-serif !important;
   font-size: 14px !important;
   font-weight: 700 !important;
   line-height: 1.3 !important;
-  padding: 6px 8px !important;
+  padding: 6px 10px !important;
   text-align: left !important;
   border-left: 3px solid transparent !important;
   border-radius: 3px;
   transition: background 0.15s, border-color 0.15s !important;
   color: #f4f7fb !important;
   display: grid !important;
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.7fr) minmax(0, 1.15fr) !important;
+  grid-template-columns: minmax(0, 1.6fr) minmax(72px, 0.55fr) minmax(0, 1.2fr) !important;
   align-items: center !important;
-  column-gap: 10px !important;
+  justify-content: stretch !important;
+  column-gap: 12px !important;
   width: 100% !important;
+  min-width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
   margin: 0 !important;
+  float: none !important;
+  clear: both !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell,
@@ -584,9 +607,11 @@
   font-size: 14px !important;
   font-weight: 650 !important;
   display: block !important;
+  float: none !important;
+  /* Kill original inline-block + width:105px that left the gray gap */
   width: auto !important;
   min-width: 0 !important;
-  max-width: 100% !important;
+  max-width: none !important;
   flex: none !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -811,6 +836,7 @@
   font-size: 13px !important;
   padding: 9px 16px !important;
   line-height: 1.2 !important;
+  width: auto !important;
 }
 
 /* ===== Nick 404 — under ads / above Discord (center black area) ===== */
