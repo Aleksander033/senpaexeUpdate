@@ -546,14 +546,16 @@
   align-self: stretch !important;
   position: relative !important;
   z-index: 3 !important;
+  /* Real scrollport — clips rows and drives scrollbar/wheel */
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  scrollbar-gutter: stable;
 }
 
-/* Stretch server rows across the list box only — no other layout changes */
+/* Full-width 3 columns — fixes gray empty gap + clipped GAME MODE */
 #menu .main-menu .panel.right .list-container .list-row,
 #menu .main-menu .panel.right .list-container .list-row.senpa-server-row {
   font-family: "Sora", sans-serif !important;
@@ -566,8 +568,8 @@
   border-radius: 3px;
   transition: background 0.15s, border-color 0.15s !important;
   color: #f4f7fb !important;
-  display: flex !important;
-  flex-direction: row !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.7fr) minmax(0, 1.15fr) !important;
   align-items: center !important;
   column-gap: 10px !important;
   width: 100% !important;
@@ -582,11 +584,10 @@
   font-size: 14px !important;
   font-weight: 650 !important;
   display: block !important;
-  /* Override original width:105px — flex distributes across full row */
-  width: 0 !important;
+  width: auto !important;
   min-width: 0 !important;
-  max-width: none !important;
-  flex: 1 1 0 !important;
+  max-width: 100% !important;
+  flex: none !important;
   padding: 0 !important;
   margin: 0 !important;
   white-space: nowrap !important;
@@ -602,7 +603,6 @@
   letter-spacing: 0.01em;
   color: #ffffff !important;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
-  flex: 1.5 1 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:nth-child(2) {
@@ -610,14 +610,12 @@
   color: var(--deck-glacier) !important;
   font-variant-numeric: tabular-nums;
   text-align: center !important;
-  flex: 0.55 1 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:nth-child(3) {
   font-size: 13px !important;
   color: rgba(230, 238, 245, 0.78) !important;
   text-align: left !important;
-  flex: 1.2 1 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row:hover {
