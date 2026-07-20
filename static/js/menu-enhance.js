@@ -286,25 +286,42 @@
   function ensureSettingsFab() {
     var menu = document.getElementById("menu");
     if (!menu) return;
-    var fab = document.getElementById("senpa-settings-fab");
-    if (!fab) {
-      fab = document.createElement("button");
-      fab.id = "senpa-settings-fab";
-      fab.type = "button";
-      fab.textContent = "SETTINGS";
-      fab.addEventListener("click", function () {
-        var toggle =
-          document.getElementById("settings-toggle") ||
-          document.querySelector("#menu #settings-toggle") ||
-          document.querySelector(".setting-btn-container #settings-toggle");
-        if (toggle) toggle.click();
-      });
-      document.body.appendChild(fab);
+
+    function ensureFab(id, label, leftPx, findToggle) {
+      var fab = document.getElementById(id);
+      if (!fab) {
+        fab = document.createElement("button");
+        fab.id = id;
+        fab.type = "button";
+        fab.textContent = label;
+        fab.addEventListener("click", function () {
+          var toggle = findToggle();
+          if (toggle) toggle.click();
+        });
+        document.body.appendChild(fab);
+      }
+      fab.style.left = leftPx;
+      var visible =
+        getComputedStyle(menu).display !== "none" && menu.offsetParent !== null;
+      var next = visible ? "block" : "none";
+      if (fab.style.display !== next) fab.style.display = next;
     }
-    var visible =
-      getComputedStyle(menu).display !== "none" && menu.offsetParent !== null;
-    var next = visible ? "block" : "none";
-    if (fab.style.display !== next) fab.style.display = next;
+
+    ensureFab("senpa-settings-fab", "SETTINGS", "18px", function () {
+      return (
+        document.getElementById("settings-toggle") ||
+        document.querySelector("#menu #settings-toggle") ||
+        document.querySelector(".setting-btn-container #settings-toggle")
+      );
+    });
+
+    ensureFab("senpa-replays-fab", "SAVE REPLAY", "128px", function () {
+      return (
+        document.getElementById("replays-toggle") ||
+        document.querySelector("#menu #replays-toggle") ||
+        document.querySelector(".setting-btn-container #replays-toggle")
+      );
+    });
   }
 
   function syncProfileVisibility() {
@@ -412,15 +429,25 @@
     var w = el.offsetWidth || targetW;
     var h = el.offsetHeight || 700;
     var padX = 24;
-    var padY = 36;
+    var padY = 64;
     var sx = (window.innerWidth - padX) / w;
     var sy = (window.innerHeight - padY) / h;
     var s = Math.min(1, sx, sy);
     if (!isFinite(s) || s <= 0) s = 1;
-    s = Math.max(0.55, Math.min(1, s * 0.98));
+    s = Math.max(0.55, Math.min(1, s * 0.96));
     var rounded = (Math.round(s * 1000) / 1000).toFixed(3);
     el.style.setProperty("--menu-scale", rounded);
     document.documentElement.style.setProperty("--menu-scale", rounded);
+
+    // If top (settings/replays) is still clipped, shrink a bit more
+    void el.offsetWidth;
+    var top = el.getBoundingClientRect().top;
+    if (top < 10 && s > 0.55) {
+      var fix = Math.max(0.55, s * 0.94);
+      rounded = (Math.round(fix * 1000) / 1000).toFixed(3);
+      el.style.setProperty("--menu-scale", rounded);
+      document.documentElement.style.setProperty("--menu-scale", rounded);
+    }
   }
 
   var _tickBusy = false;

@@ -134,15 +134,15 @@
 /* Kill Senpa media rule that applied translateY via transform */
 @media screen and (min-width: 1240px) and (min-height: 760px) {
   #menu .main-menu {
-    margin-top: -20px !important;
+    margin-top: 0 !important;
     -webkit-transform: none !important;
     transform: none !important;
   }
 
   @supports not (zoom: 1) {
     #menu .main-menu {
-      -webkit-transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
-      transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
+      -webkit-transform: scale(var(--menu-scale, 1)) !important;
+      transform: scale(var(--menu-scale, 1)) !important;
     }
   }
 }
@@ -164,6 +164,7 @@
   flex: 1.05 1 0 !important;
   margin-right: 0 !important;
   max-width: none !important;
+  padding-top: 10px !important;
 }
 
 #menu .main-menu .panel.center {
@@ -200,7 +201,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 5;
+  z-index: 0;
   background:
     linear-gradient(var(--deck-ember), var(--deck-ember)) top left / 34px 2px no-repeat,
     linear-gradient(var(--deck-ember), var(--deck-ember)) top left / 2px 34px no-repeat,
@@ -226,7 +227,7 @@
     rgba(126, 184, 212, 0.4),
     transparent
   );
-  z-index: 4;
+  z-index: 0;
   pointer-events: none;
   animation: deck-seam-breathe 5s ease-in-out infinite;
   mix-blend-mode: screen;
@@ -235,7 +236,7 @@
 #menu .main-menu .panel {
   padding: 18px 16px 22px !important;
   position: relative;
-  z-index: 2;
+  z-index: 6;
   vertical-align: top;
 }
 
@@ -978,10 +979,10 @@ body.senpa-404-awake #menu .main-menu .panel.center #spectate { animation-delay:
   }
 }
 
-#senpa-settings-fab {
+#senpa-settings-fab,
+#senpa-replays-fab {
   position: fixed;
   top: 18px;
-  left: 18px;
   z-index: 120;
   display: none;
   padding: 10px 14px;
@@ -995,6 +996,14 @@ body.senpa-404-awake #menu .main-menu .panel.center #spectate { animation-delay:
   letter-spacing: 0.14em;
   cursor: pointer;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+#senpa-settings-fab {
+  left: 18px;
+}
+
+#senpa-replays-fab {
+  left: 128px;
 }
 
 #senpa-profile-strip {
