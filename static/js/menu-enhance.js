@@ -346,12 +346,40 @@
       "#menu .main-menu .panel.right .list-container"
     );
     if (!box) return;
-    // Force original-style scroll box so servers never stretch the menu
+
     box.style.setProperty("height", "450px", "important");
     box.style.setProperty("max-height", "450px", "important");
+    box.style.setProperty("min-height", "0", "important");
+    box.style.setProperty("width", "100%", "important");
     box.style.setProperty("overflow-x", "hidden", "important");
-    box.style.setProperty("overflow-y", "scroll", "important");
+    box.style.setProperty("overflow-y", "auto", "important");
     box.style.setProperty("box-sizing", "border-box", "important");
+    box.style.setProperty("position", "relative", "important");
+    box.style.setProperty("z-index", "8", "important");
+
+    var cells = box.querySelectorAll(".list-cell");
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].style.setProperty("width", "auto", "important");
+      cells[i].style.setProperty("max-width", "100%", "important");
+      cells[i].style.setProperty("display", "block", "important");
+    }
+
+    // Make mouse wheel always scroll this box (parent scale/flex can eat the event)
+    if (!box.dataset.senpaWheelBound) {
+      box.dataset.senpaWheelBound = "1";
+      box.addEventListener(
+        "wheel",
+        function (e) {
+          var before = box.scrollTop;
+          box.scrollTop += e.deltaY;
+          if (box.scrollTop !== before) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        { passive: false }
+      );
+    }
   }
 
   function fitMenuToViewport() {

@@ -156,17 +156,24 @@
   display: flex !important;
   flex-direction: column !important;
   min-height: 0 !important;
+  overflow: hidden !important;
 }
 
-/* Servers back inside the box — fixed height + scroll (like original 450px) */
+/* Servers scroll box — min-height:0 is required for flex children to scroll */
 #menu .main-menu .panel.right .list-container {
   height: 450px !important;
   max-height: 450px !important;
   min-height: 0 !important;
+  width: 100% !important;
   overflow-x: hidden !important;
-  overflow-y: scroll !important;
-  flex: none !important;
+  overflow-y: auto !important;
+  flex: 0 0 450px !important;
   align-self: stretch !important;
+  position: relative !important;
+  z-index: 8 !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 #menu .main-menu::before {
@@ -508,33 +515,41 @@
   border: 1px solid var(--deck-line) !important;
   border-radius: 3px !important;
   background: rgba(0, 0, 0, 0.4) !important;
-  padding: 5px !important;
+  padding: 6px 8px !important;
   height: 450px !important;
   max-height: 450px !important;
   min-height: 0 !important;
+  width: 100% !important;
   overflow-x: hidden !important;
-  overflow-y: scroll !important;
+  overflow-y: auto !important;
   box-sizing: border-box !important;
-  flex: none !important;
+  flex: 0 0 450px !important;
+  position: relative !important;
+  z-index: 8 !important;
+  overscroll-behavior: contain !important;
 }
 
+/* Full-width 3 columns — fixes gray empty gap + clipped GAME MODE */
 #menu .main-menu .panel.right .list-container .list-row,
 #menu .main-menu .panel.right .list-container .list-row.senpa-server-row {
   font-family: "Sora", sans-serif !important;
   font-size: 14px !important;
   font-weight: 700 !important;
-  line-height: 1.25 !important;
-  padding: 5px 6px !important;
+  line-height: 1.3 !important;
+  padding: 6px 8px !important;
   text-align: left !important;
   border-left: 3px solid transparent !important;
   border-radius: 3px;
-  transition: background 0.15s, border-color 0.15s, transform 0.15s !important;
+  transition: background 0.15s, border-color 0.15s !important;
   color: #f4f7fb !important;
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.7fr) minmax(0, 1.15fr) !important;
   align-items: center !important;
-  gap: 4px;
+  column-gap: 10px !important;
   width: 100% !important;
-  box-sizing: border-box;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell,
@@ -542,21 +557,21 @@
   font-family: "Sora", sans-serif !important;
   font-size: 14px !important;
   font-weight: 650 !important;
+  display: block !important;
   width: auto !important;
   min-width: 0 !important;
-  max-width: none !important;
-  flex: 1 1 0;
-  padding: 0 6px !important;
-  vertical-align: middle;
-  display: inline-block !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 100% !important;
+  flex: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:first-child,
 #menu .main-menu .panel.right .list-container .list-row .list-cell.senpa-server-name {
-  flex: 1.35 1 0 !important;
   font-size: 15px !important;
   font-weight: 800 !important;
   letter-spacing: 0.01em;
@@ -565,22 +580,22 @@
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:nth-child(2) {
-  flex: 0.75 1 0 !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
   color: var(--deck-glacier) !important;
   font-variant-numeric: tabular-nums;
+  text-align: center !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row .list-cell:nth-child(3) {
-  flex: 1 1 0 !important;
-  font-size: 15px !important;
-  color: rgba(230, 238, 245, 0.72) !important;
+  font-size: 13px !important;
+  color: rgba(230, 238, 245, 0.78) !important;
+  text-align: left !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row:hover {
   background: rgba(232, 132, 74, 0.16) !important;
   border-left-color: var(--deck-ember) !important;
-  transform: translateX(3px);
+  transform: none !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row.active {
@@ -593,20 +608,20 @@
   font-family: "Oxanium", sans-serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.16em !important;
+  letter-spacing: 0.14em !important;
   text-transform: uppercase;
   color: rgba(230, 238, 245, 0.4) !important;
   background: rgba(255, 255, 255, 0.03) !important;
   border-left-color: transparent !important;
   transform: none !important;
-  padding: 9px 8px !important;
+  padding: 8px !important;
   animation: none !important;
 }
 
 #menu .main-menu .panel.right .list-container .list-row.header .list-cell {
   font-size: 11px !important;
   font-weight: 700 !important;
-  color: rgba(230, 238, 245, 0.4) !important;
+  color: rgba(230, 238, 245, 0.45) !important;
   text-shadow: none !important;
 }
 
