@@ -85,7 +85,13 @@
   }
 }
 
-/* ===== Main panel — wide deck that fills the screen ===== */
+/* ===== Main panel — wide deck that fills the screen =====
+ * IMPORTANT: do not use transform:scale() on this element.
+ * CSS transforms create a containing layer that breaks nested
+ * overflow scrolling (wheel hit-testing + scrollbar sync).
+ * Use zoom so layout + paint scale together and .list-container
+ * remains a real scrollport.
+ */
 #menu .main-menu {
   background:
     linear-gradient(150deg, rgba(232, 132, 74, 0.09) 0%, transparent 40%),
@@ -97,32 +103,47 @@
     0 36px 96px rgba(0, 0, 0, 0.82),
     0 0 72px rgba(232, 132, 74, 0.12) !important;
   padding: 0 !important;
-  overflow: hidden;
-  max-height: none;
+  overflow: visible;
+  max-height: none !important;
   animation: deck-float-in 0.45s var(--deck-ease);
   position: relative !important;
   left: auto !important;
   top: auto !important;
   isolation: isolate;
-  /* Fill screen with room for social rail beside the deck */
   width: min(90vw, 1380px) !important;
   max-width: 90vw !important;
   display: flex !important;
   flex-direction: row !important;
-  align-items: stretch !important;
+  align-items: flex-start !important;
   justify-content: stretch !important;
   box-sizing: border-box !important;
-  max-height: min(88vh, 780px) !important;
-  transform-origin: center center !important;
-  -webkit-transform: scale(var(--menu-scale, 1)) !important;
-  transform: scale(var(--menu-scale, 1)) !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+  zoom: var(--menu-scale, 1);
 }
 
-/* Override Senpa media rule that breaks centering (translateY only) */
+@supports not (zoom: 1) {
+  #menu .main-menu {
+    zoom: normal;
+    transform-origin: center center !important;
+    -webkit-transform: scale(var(--menu-scale, 1)) !important;
+    transform: scale(var(--menu-scale, 1)) !important;
+  }
+}
+
+/* Kill Senpa media rule that applied translateY via transform */
 @media screen and (min-width: 1240px) and (min-height: 760px) {
   #menu .main-menu {
-    -webkit-transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
-    transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
+    margin-top: -20px !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+  }
+
+  @supports not (zoom: 1) {
+    #menu .main-menu {
+      -webkit-transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
+      transform: translateY(-20px) scale(var(--menu-scale, 1)) !important;
+    }
   }
 }
 
@@ -132,9 +153,11 @@
   width: auto !important;
   flex: 1 1 0 !important;
   min-width: 0 !important;
+  min-height: 0 !important;
   padding: 12px 14px !important;
   box-sizing: border-box !important;
   vertical-align: top;
+  overflow: visible !important;
 }
 
 #menu .main-menu .panel.left {
@@ -149,31 +172,27 @@
   max-width: none !important;
 }
 
+/*
+ * RIGHT PANEL / SERVER LIST — structural scrollport
+ * Container: #menu .main-menu .panel.right .list-container
+ * Rows:     .list-row (header + server entries)
+ * Original Senpa set height:450px but never overflow-y, so rows
+ * painted outside the panel. This is the only scroll container.
+ */
 #menu .main-menu .panel.right {
   flex: 1.15 1 0 !important;
   margin-left: 0 !important;
   max-width: none !important;
   display: flex !important;
   flex-direction: column !important;
+  align-items: stretch !important;
   min-height: 0 !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
-/* Servers scroll box — min-height:0 is required for flex children to scroll */
-#menu .main-menu .panel.right .list-container {
-  height: 450px !important;
-  max-height: 450px !important;
-  min-height: 0 !important;
-  width: 100% !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  flex: 0 0 450px !important;
-  align-self: stretch !important;
-  position: relative !important;
-  z-index: 8 !important;
-  overscroll-behavior: contain !important;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+#menu .main-menu .panel.right .title,
+#menu .main-menu .panel.right .region-selectors {
+  flex: 0 0 auto !important;
 }
 
 #menu .main-menu::before {
@@ -512,21 +531,28 @@
 }
 
 #menu .main-menu .panel.right .list-container {
+  display: block !important;
   border: 1px solid var(--deck-line) !important;
   border-radius: 3px !important;
   background: rgba(0, 0, 0, 0.4) !important;
   padding: 6px 8px !important;
+  margin-top: -1px !important;
   height: 450px !important;
   max-height: 450px !important;
   min-height: 0 !important;
   width: 100% !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
   box-sizing: border-box !important;
   flex: 0 0 450px !important;
+  align-self: stretch !important;
   position: relative !important;
-  z-index: 8 !important;
+  z-index: 3 !important;
+  /* Real scrollport — clips rows and drives scrollbar/wheel */
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scrollbar-gutter: stable;
 }
 
 /* Full-width 3 columns — fixes gray empty gap + clipped GAME MODE */

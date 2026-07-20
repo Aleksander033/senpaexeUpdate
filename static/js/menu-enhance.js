@@ -347,38 +347,53 @@
     );
     if (!box) return;
 
-    box.style.setProperty("height", "450px", "important");
-    box.style.setProperty("max-height", "450px", "important");
-    box.style.setProperty("min-height", "0", "important");
-    box.style.setProperty("width", "100%", "important");
-    box.style.setProperty("overflow-x", "hidden", "important");
-    box.style.setProperty("overflow-y", "auto", "important");
-    box.style.setProperty("box-sizing", "border-box", "important");
-    box.style.setProperty("position", "relative", "important");
-    box.style.setProperty("z-index", "8", "important");
+    // Structural scrollport (CSS is source of truth; reinforce once)
+    box.style.height = "450px";
+    box.style.maxHeight = "450px";
+    box.style.minHeight = "0";
+    box.style.overflowX = "hidden";
+    box.style.overflowY = "auto";
+    box.style.boxSizing = "border-box";
+    box.style.position = "relative";
+    box.style.touchAction = "pan-y";
+    box.style.overscrollBehavior = "contain";
 
-    var cells = box.querySelectorAll(".list-cell");
-    for (var i = 0; i < cells.length; i++) {
-      cells[i].style.setProperty("width", "auto", "important");
-      cells[i].style.setProperty("max-width", "100%", "important");
-      cells[i].style.setProperty("display", "block", "important");
+    // Keyboard scrolling when the list is focused
+    if (!box.hasAttribute("tabindex")) {
+      box.setAttribute("tabindex", "0");
+      box.setAttribute("role", "listbox");
+      box.setAttribute("aria-label", "Server list");
     }
 
-    // Make mouse wheel always scroll this box (parent scale/flex can eat the event)
-    if (!box.dataset.senpaWheelBound) {
-      box.dataset.senpaWheelBound = "1";
-      box.addEventListener(
-        "wheel",
-        function (e) {
-          var before = box.scrollTop;
-          box.scrollTop += e.deltaY;
-          if (box.scrollTop !== before) {
-            e.preventDefault();
-            e.stopPropagation();
+    if (!box.dataset.senpaScrollBound) {
+      box.dataset.senpaScrollBound = "1";
+
+      // Focus on pointer enter so Arrow/Page keys scroll this box
+      box.addEventListener("mouseenter", function () {
+        if (document.activeElement !== box) {
+          try {
+            box.focus({ preventScroll: true });
+          } catch (_e) {
+            box.focus();
           }
-        },
-        { passive: false }
-      );
+        }
+      });
+
+      box.addEventListener("keydown", function (e) {
+        var key = e.key;
+        var page = Math.max(120, box.clientHeight - 40);
+        var step = 40;
+        var next = box.scrollTop;
+        if (key === "ArrowDown") next += step;
+        else if (key === "ArrowUp") next -= step;
+        else if (key === "PageDown") next += page;
+        else if (key === "PageUp") next -= page;
+        else if (key === "Home") next = 0;
+        else if (key === "End") next = box.scrollHeight;
+        else return;
+        e.preventDefault();
+        box.scrollTop = next;
+      });
     }
   }
 
@@ -386,7 +401,6 @@
     var el = document.querySelector("#menu .main-menu");
     if (!el) return;
 
-    // Target width: wide deck, small gutters (social icons sit beside menu)
     var targetW = Math.min(window.innerWidth * 0.9, 1380);
     el.style.width = Math.round(targetW) + "px";
     el.style.maxWidth = "90vw";
@@ -422,7 +436,8 @@
       syncProfileVisibility();
       boostServerRows();
       lockServerListScroll();
-      fitMenuToViewport();
+      // Do NOT call fitMenuToViewport here — resetting --menu-scale
+      // every tick breaks scroll and causes layout thrash.
     } catch (_e) {
     } finally {
       _tickBusy = false;
@@ -430,6 +445,7 @@
   }
 
   tick();
+  fitMenuToViewport();
   setInterval(tick, 800);
   window.addEventListener("resize", fitMenuToViewport);
   window.addEventListener("orientationchange", fitMenuToViewport);
