@@ -15,7 +15,7 @@
   --deck-mist: rgba(230, 238, 245, 0.64);
   --deck-line: rgba(232, 132, 74, 0.18);
   --deck-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --menu-scale: 1;
+  --menu-scale: 0.9;
 }
 
 /* ===== Stage ===== */
@@ -119,7 +119,9 @@
   box-sizing: border-box !important;
   -webkit-transform: none !important;
   transform: none !important;
-  zoom: var(--menu-scale, 1);
+  zoom: var(--menu-scale, 0.9);
+  height: fit-content !important;
+  max-height: none !important;
 }
 
 @supports not (zoom: 1) {
@@ -909,13 +911,13 @@
   padding: 6px 8px !important;
   margin-top: -1px !important;
   margin-bottom: 0 !important;
-  /* Original Senpa height — border ends with the list */
-  height: 450px !important;
-  max-height: 450px !important;
+  /* Match original look — slightly shorter so no dead black under last row */
+  height: 380px !important;
+  max-height: 380px !important;
   min-height: 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  flex: 0 0 450px !important;
+  flex: 0 0 380px !important;
   align-self: stretch !important;
   position: relative !important;
   z-index: 3 !important;

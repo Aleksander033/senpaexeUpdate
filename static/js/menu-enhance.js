@@ -448,9 +448,9 @@
     );
     if (!box) return;
 
-    // Keep CSS height 450px (original Senpa list box)
-    box.style.height = "450px";
-    box.style.maxHeight = "450px";
+    // List box height matching CSS (no tall empty black under rows)
+    box.style.height = "380px";
+    box.style.maxHeight = "380px";
     box.style.minHeight = "0";
     box.style.overflowX = "hidden";
     box.style.overflowY = "auto";
@@ -459,7 +459,7 @@
     box.style.touchAction = "pan-y";
     box.style.overscrollBehavior = "contain";
     box.style.marginBottom = "0";
-    box.style.flex = "0 0 450px";
+    box.style.flex = "0 0 380px";
 
     if (!box.hasAttribute("tabindex")) {
       box.setAttribute("tabindex", "0");
@@ -506,36 +506,23 @@
     el.style.width = Math.round(targetW) + "px";
     el.style.maxWidth = "90vw";
 
-    // Measure at scale 1
-    el.style.setProperty("--menu-scale", "1");
-    document.documentElement.style.setProperty("--menu-scale", "1");
+    // Always start from browser-zoom-90% look (what you liked)
+    var base = 0.9;
+    el.style.setProperty("--menu-scale", String(base));
+    document.documentElement.style.setProperty("--menu-scale", String(base));
     void el.offsetWidth;
-    var w = el.offsetWidth || targetW;
-    var h = el.offsetHeight || 700;
-    // Extra vertical pad so SETTINGS / SAVE REPLAY never clip (like browser zoom 90%)
-    var padX = 32;
-    var padY = 88;
-    var sx = (window.innerWidth - padX) / w;
-    var sy = (window.innerHeight - padY) / h;
-    var s = Math.min(1, sx, sy);
-    if (!isFinite(s) || s <= 0) s = 1;
-    // Prefer ~90% feel so top toolbar stays fully visible
-    s = Math.max(0.55, Math.min(0.92, s * 0.94));
-    var rounded = (Math.round(s * 1000) / 1000).toFixed(3);
-    el.style.setProperty("--menu-scale", rounded);
-    document.documentElement.style.setProperty("--menu-scale", rounded);
 
-    // Iterate if still clipped top or bottom
-    void el.offsetWidth;
     var rect = el.getBoundingClientRect();
+    var s = base;
     var tries = 0;
+    // Only shrink further if still clipped; never go above 0.9
     while (
-      tries < 4 &&
+      tries < 6 &&
       s > 0.55 &&
-      (rect.top < 12 || rect.bottom > window.innerHeight - 12)
+      (rect.top < 10 || rect.bottom > window.innerHeight - 10 || rect.left < 8 || rect.right > window.innerWidth - 8)
     ) {
-      s = Math.max(0.55, s * 0.93);
-      rounded = (Math.round(s * 1000) / 1000).toFixed(3);
+      s = Math.max(0.55, s * 0.94);
+      var rounded = (Math.round(s * 1000) / 1000).toFixed(3);
       el.style.setProperty("--menu-scale", rounded);
       document.documentElement.style.setProperty("--menu-scale", rounded);
       void el.offsetWidth;
