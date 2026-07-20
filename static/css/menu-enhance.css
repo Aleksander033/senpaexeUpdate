@@ -164,7 +164,16 @@
   flex: 1.05 1 0 !important;
   margin-right: 0 !important;
   max-width: none !important;
-  padding-top: 10px !important;
+  /* Left deck is a vertical stack — no leftover empty bands */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: var(--left-gap, 12px) !important;
+  padding: 14px 14px 12px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  box-sizing: border-box !important;
 }
 
 #menu .main-menu .panel.center {
@@ -240,26 +249,367 @@
   vertical-align: top;
 }
 
-/* ===== LEFT ===== */
+/* ===== LEFT =====
+ * Compact vertical deck: toolbar → skins → account → footer
+ * Spacing via --left-gap only (no random margins / fixed empty heights)
+ */
+#menu .main-menu .panel.left {
+  --left-gap: 12px;
+  --left-pad: 12px;
+  --left-btn-h: 40px;
+  font-family: "Sora", sans-serif;
+}
+
+/* Top: Settings + Save Replay — equal twins */
+#menu .main-menu .panel.left .setting-btn-container {
+  position: relative;
+  z-index: 8;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+  visibility: visible !important;
+}
+
+/* Hide secondary toggles from the primary toolbar row (keep in DOM) */
+#menu .main-menu .panel.left .setting-btn-container #music-toggle,
+#menu .main-menu .panel.left .setting-btn-container #custom-games-toggle,
+#menu .main-menu .panel.left .setting-btn-container #players-list-toggle {
+  display: none !important;
+}
+
+#menu .main-menu .panel.left .setting-btn-container #settings-toggle,
+#menu .main-menu .panel.left .setting-btn-container #replays-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--left-btn-h) !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  box-sizing: border-box !important;
+  background: rgba(232, 132, 74, 0.1) !important;
+  border: 1px solid var(--deck-line) !important;
+  border-radius: 3px !important;
+  color: #f4f7fb !important;
+  font-family: "Oxanium", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: border-color 0.2s, background 0.2s, color 0.2s !important;
+}
+
+#menu .main-menu .panel.left .setting-btn-container #settings-toggle:hover,
+#menu .main-menu .panel.left .setting-btn-container #replays-toggle:hover {
+  background: rgba(232, 132, 74, 0.26) !important;
+  border-color: var(--deck-ember) !important;
+  color: #fff !important;
+}
+
 #menu .main-menu .panel.left .setting-btn-container > * {
   background: rgba(232, 132, 74, 0.07) !important;
   border: 1px solid var(--deck-line) !important;
   border-radius: 3px !important;
   color: var(--deck-mist) !important;
-  transition: border-color 0.2s, background 0.2s, color 0.2s !important;
 }
 
-#menu .main-menu .panel.left .setting-btn-container > *:hover,
-#menu .main-menu .panel.left .setting-btn-container #settings-toggle:hover {
-  background: rgba(232, 132, 74, 0.24) !important;
+/* Skin selector — centered, compact, arrows vertically middle */
+#menu .main-menu .panel.left .profile-controls {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+#menu .main-menu .panel.left .profile-controls .inline {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+}
+
+#menu .main-menu .panel.left .profile-controls .arrow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 72px !important;
+  margin: 0 !important;
+  font-size: 22px !important;
+  color: rgba(230, 238, 245, 0.45) !important;
+  transition: color 0.2s !important;
+}
+
+#menu .main-menu .panel.left .profile-controls .arrow:hover {
+  color: var(--deck-ember-lit) !important;
+}
+
+#menu .main-menu .panel.left .profile-controls .skin-preview {
+  width: 84px !important;
+  height: 84px !important;
+  margin: 0 !important;
+  border-width: 4px !important;
+  border-color: rgba(232, 132, 74, 0.45) !important;
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  flex: 0 0 auto !important;
+}
+
+#menu .main-menu .panel.left .profile-controls .skin-preview:hover,
+#menu .main-menu .panel.left .profile-controls .skin-preview:active {
   border-color: var(--deck-ember) !important;
-  color: #fff !important;
+}
+
+/* Account / login card — auto height, no 290px empty box */
+#menu .main-menu .panel.left #main-left-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: var(--left-pad) !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--deck-line) !important;
+  background: rgba(0, 0, 0, 0.32) !important;
+  overflow: hidden !important;
+}
+
+#menu .main-menu .panel.left #account-box {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+#menu .main-menu .panel.left #account-box .account-profile {
+  height: auto !important;
+  min-height: 0 !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+}
+
+#menu .main-menu .panel.left #account-box .account-panel {
+  flex-grow: 0 !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  background: rgba(16, 22, 33, 0.9) !important;
+  border: 1px solid rgba(232, 132, 74, 0.12) !important;
+}
+
+/* Profile header: avatar + identity on one row */
+#menu .main-menu .panel.left #account-box #pf-avatar {
+  width: 56px !important;
+  height: 56px !important;
+  margin: 0 12px 0 0 !important;
+  border-width: 3px !important;
+  border-color: var(--deck-ember) !important;
+  flex: 0 0 auto !important;
+}
+
+#menu .main-menu .panel.left #account-box .account-id {
+  position: static !important;
+  left: auto !important;
+  bottom: auto !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  text-align: left !important;
+}
+
+#menu .main-menu .panel.left #account-box .exp-area {
+  margin-top: 8px !important;
+  padding: 4px 8px !important;
+  border-color: rgba(232, 132, 74, 0.35) !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  min-height: 22px !important;
+}
+
+#menu .main-menu .panel.left #account-box .exp-fill {
+  background: var(--deck-ember) !important;
+}
+
+#menu .main-menu .panel.left #account-box .exp-info {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+}
+
+/* Action buttons — one system, equal size */
+#menu .main-menu .panel.left #account-box .senpa-left-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+#menu .main-menu .panel.left #account-box .senpa-left-auth {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+#menu .main-menu .panel.left #account-box button {
+  width: 100% !important;
+  height: var(--left-btn-h) !important;
+  margin: 0 !important;
+  padding: 0 10px !important;
+  box-sizing: border-box !important;
+  border: 1px solid var(--deck-line) !important;
+  border-bottom: 1px solid var(--deck-line) !important;
+  border-radius: 3px !important;
+  background: rgba(232, 132, 74, 0.14) !important;
+  color: #f4f7fb !important;
+  font-family: "Oxanium", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  transition: background 0.2s, border-color 0.2s !important;
+}
+
+#menu .main-menu .panel.left #account-box button:hover {
+  background: rgba(232, 132, 74, 0.28) !important;
+  border-color: var(--deck-ember) !important;
+}
+
+#menu .main-menu .panel.left #account-box #btnLoginFB {
+  background: rgba(66, 139, 202, 0.35) !important;
+  border-color: rgba(66, 139, 202, 0.55) !important;
+}
+
+#menu .main-menu .panel.left #account-box #btnLoginDisc {
+  background: rgba(114, 137, 218, 0.35) !important;
+  border-color: rgba(114, 137, 218, 0.55) !important;
+}
+
+#menu .main-menu .panel.left #account-box #btnLogout {
+  width: 100% !important;
+  height: 32px !important;
+  font-size: 11px !important;
+}
+
+/* Sign-in copy — tighter */
+#menu .main-menu .panel.left #main-left-panel,
+#menu .main-menu .panel.left #account-box {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+#menu .main-menu .panel.left #main-left-panel br {
+  display: none;
+}
+
+/* Footer — pinned to bottom of left deck, no giant empty gap above */
+#menu .main-menu .panel.left .info-text {
+  flex: 0 0 auto !important;
+  margin: auto 0 0 !important;
+  padding-top: 8px !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  color: rgba(230, 238, 245, 0.42) !important;
 }
 
 #menu .main-menu .panel.left .btn,
 #menu .main-menu .panel.left button,
 #menu .main-menu .panel.center .btn {
   font-family: "Oxanium", sans-serif !important;
+}
+
+/* Fixed fabs stay visible — equal twins matching toolbar */
+#senpa-settings-fab,
+#senpa-replays-fab {
+  position: fixed;
+  top: 16px;
+  z-index: 120;
+  display: none;
+  min-width: 132px;
+  height: 42px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  border: 1px solid rgba(232, 132, 74, 0.45);
+  background: rgba(11, 15, 22, 0.92);
+  color: #f4f7fb;
+  font-family: "Oxanium", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+#senpa-settings-fab {
+  left: 16px;
+}
+
+#senpa-replays-fab {
+  left: 158px;
+}
+
+@media screen and (max-height: 800px) {
+  #menu .main-menu .panel.left {
+    --left-gap: 8px;
+    --left-pad: 10px;
+    --left-btn-h: 36px;
+    padding: 10px 12px 10px !important;
+  }
+
+  #menu .main-menu .panel.left .profile-controls .skin-preview {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  #menu .main-menu .panel.left .profile-controls .arrow {
+    height: 64px !important;
+  }
+
+  #menu .main-menu .panel.left #account-box #pf-avatar {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
+
+@media screen and (max-height: 720px) {
+  #menu .main-menu .panel.left {
+    --left-gap: 6px;
+    --left-pad: 8px;
+    --left-btn-h: 34px;
+  }
+
+  #menu .main-menu .panel.left .profile-controls {
+    padding: 0 !important;
+  }
+
+  #menu .main-menu .panel.left .profile-controls .skin-preview {
+    width: 64px !important;
+    height: 64px !important;
+  }
 }
 
 /* ===== CENTER ===== */
@@ -657,11 +1007,7 @@
   transform: none !important;
 }
 
-/* Profile / left cards */
-#menu .main-menu .panel.left {
-  font-family: "Sora", sans-serif;
-}
-
+/* Profile strip / cards (non-left leftovers) */
 #menu .main-menu .panel.left .btn,
 #menu .main-menu .panel.left [class*="btn"] {
   background: rgba(232, 132, 74, 0.14) !important;
@@ -979,56 +1325,10 @@ body.senpa-404-awake #menu .main-menu .panel.center #spectate { animation-delay:
   }
 }
 
-#senpa-settings-fab,
-#senpa-replays-fab {
-  position: fixed;
-  top: 18px;
-  z-index: 120;
-  display: none;
-  padding: 10px 14px;
-  border-radius: 3px;
-  border: 1px solid rgba(232, 132, 74, 0.45);
-  background: rgba(11, 15, 22, 0.9);
-  color: #f4f7fb;
-  font-family: "Oxanium", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  cursor: pointer;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
-}
-
-#senpa-settings-fab {
-  left: 18px;
-}
-
-#senpa-replays-fab {
-  left: 128px;
-}
-
 #senpa-profile-strip {
   top: 18px !important;
   right: 18px !important;
   left: auto !important;
-}
-
-
-
-/* Keep replays/settings icons + bottom content visible */
-#menu .main-menu .panel.left .setting-btn-container {
-  position: relative;
-  z-index: 8;
-  display: block !important;
-  visibility: visible !important;
-  margin-top: 8px !important;
-  margin-bottom: 6px !important;
-}
-
-#menu .main-menu .panel.left .setting-btn-container > *,
-#menu .main-menu .panel.left .setting-btn-container #replays-toggle {
-  display: inline-block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
 }
 
 #senpa-skin-drives {

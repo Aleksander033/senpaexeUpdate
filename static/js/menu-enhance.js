@@ -283,6 +283,71 @@
     document.body.appendChild(el);
   }
 
+  function labelToggle(el, text) {
+    if (!el) return;
+    if (el.querySelector(".senpa-toggle-label")) return;
+    var icon = el.querySelector("i");
+    el.textContent = "";
+    if (icon) el.appendChild(icon);
+    var span = document.createElement("span");
+    span.className = "senpa-toggle-label";
+    span.textContent = text;
+    el.appendChild(span);
+    el.setAttribute("aria-label", text);
+    el.title = text;
+  }
+
+  function wrapButtons(root, className, pred) {
+    if (!root || root.querySelector("." + className)) return;
+    var buttons = Array.prototype.slice
+      .call(root.querySelectorAll("button"))
+      .filter(pred);
+    if (buttons.length < 2) return;
+    var parent = buttons[0].parentNode;
+    for (var i = 1; i < buttons.length; i++) {
+      if (buttons[i].parentNode !== parent) return;
+    }
+    var wrap = document.createElement("div");
+    wrap.className = className;
+    parent.insertBefore(wrap, buttons[0]);
+    for (var g = 0; g < buttons.length; g++) wrap.appendChild(buttons[g]);
+  }
+
+  function layoutLeftPanel() {
+    var left = document.querySelector("#menu .main-menu .panel.left");
+    if (!left) return;
+    left.classList.add("senpa-left-deck");
+
+    var settings = left.querySelector("#settings-toggle");
+    var replays = left.querySelector("#replays-toggle");
+    labelToggle(settings, "SETTINGS");
+    labelToggle(replays, "SAVE REPLAY");
+
+    var bar = left.querySelector(".setting-btn-container");
+    if (bar && settings && replays) {
+      if (bar.firstElementChild !== settings) {
+        bar.insertBefore(settings, bar.firstChild);
+      }
+      if (settings.nextElementSibling !== replays) {
+        bar.insertBefore(replays, settings.nextSibling);
+      }
+    }
+
+    var account = left.querySelector("#account-box") || left.querySelector("#main-left-panel");
+    if (!account) return;
+
+    wrapButtons(account, "senpa-left-auth", function (btn) {
+      return btn.id === "btnLoginFB" || btn.id === "btnLoginDisc";
+    });
+    wrapButtons(account, "senpa-left-actions", function (btn) {
+      if (btn.id === "btnLoginFB" || btn.id === "btnLoginDisc" || btn.id === "btnLogout") {
+        return false;
+      }
+      if (btn.closest(".senpa-left-auth")) return false;
+      return true;
+    });
+  }
+
   function ensureSettingsFab() {
     var menu = document.getElementById("menu");
     if (!menu) return;
@@ -307,7 +372,7 @@
       if (fab.style.display !== next) fab.style.display = next;
     }
 
-    ensureFab("senpa-settings-fab", "SETTINGS", "18px", function () {
+    ensureFab("senpa-settings-fab", "SETTINGS", "16px", function () {
       return (
         document.getElementById("settings-toggle") ||
         document.querySelector("#menu #settings-toggle") ||
@@ -315,7 +380,7 @@
       );
     });
 
-    ensureFab("senpa-replays-fab", "SAVE REPLAY", "128px", function () {
+    ensureFab("senpa-replays-fab", "SAVE REPLAY", "158px", function () {
       return (
         document.getElementById("replays-toggle") ||
         document.querySelector("#menu #replays-toggle") ||
@@ -460,6 +525,7 @@
       ensureNick404();
       ensureProfileStrip();
       ensureSettingsFab();
+      layoutLeftPanel();
       syncProfileVisibility();
       boostServerRows();
       lockServerListScroll();
